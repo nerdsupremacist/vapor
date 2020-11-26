@@ -134,6 +134,7 @@ public struct FileIO {
             : nil
         // Create empty headers array.
         var headers: HTTPHeaders = [:]
+        headers.add(name: .acceptRanges, value: "bytes")
 
         // Generate ETag value, "HEX value of last modified date" + "-" + "file size"
         let fileETag = "\(modifiedAt.timeIntervalSince1970)-\(fileSize)"
@@ -244,7 +245,7 @@ extension HTTPHeaders.Range.Value {
             case .tail(let value):
                 return (offset: numericCast(size - value), byteCount: value)
             case .within(let start, let end):
-                return (offset: numericCast(start), byteCount: end + 1)
+                return (offset: numericCast(start), byteCount: end - start + 1)
         }
     }
     
